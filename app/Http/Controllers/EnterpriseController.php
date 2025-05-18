@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\FilterDTO;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateGenderRequest;
-use App\Http\Requests\UpdateGenderRequest;
-use App\Http\Resources\GenderResource;
-use App\Models\Gender;
+use App\Http\Requests\CreateEnterpriseRequest;
+use App\Http\Requests\UpdateEnterpriseRequest;
+use App\Http\Resources\EnterpriseResource;
+use App\Models\Enterprise;
 use App\Services\PaginateRegistersService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Database\QueryException;
@@ -15,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Throwable;
 
-class GenderController extends Controller
+class EnterpriseController extends Controller
 {
     use ApiResponseTrait;
     protected array $searchables = ['name'];
@@ -24,15 +23,15 @@ class GenderController extends Controller
         protected PaginateRegistersService $pagination
     ) {}
     /**
-     * Muestra todos los géneros.
+     * Muestra todas las empresas.
      */
     public function index(Request $request):JsonResponse
     {
         try {
             $dto = FilterDTO::fromRequest($request->all());
-            $results = $this->pagination->execute(Gender::query(), $dto, $this->searchables);
+            $results = $this->pagination->execute(Enterprise::query(), $dto, $this->searchables);
             $data = [
-                'items' => GenderResource::collection($results),
+                'items' => EnterpriseResource::collection($results),
                 'pagination' => ['current_page' => $results->currentPage(), 'per_page' => $results->perPage(), 'total' => $results->total(), 'last_page' => $results->lastPage()],
             ];
             return $this->successResponse($data,'Registros Obtenidos Exitosamente');
@@ -43,13 +42,13 @@ class GenderController extends Controller
     }
 
     /**
-     * Guarda un nuevo género en la base de datos.
+     * Guarda una nueva empresa en la base de datos.
      */
-    public function store(CreateGenderRequest $request):JsonResponse
+    public function store(CreateEnterpriseRequest $request):JsonResponse
     { 
         try {
-            $model = Gender::create($request->validated());
-            return $this->successResponse(new GenderResource($model),'Registro Creado Exitosamente',201);
+            $model = Enterprise::create($request->validated());
+            return $this->successResponse(new EnterpriseResource($model),'Registro Creado Exitosamente',201);
         } catch (QueryException $e) {
             return $this->errorResponse('Error de base de datos al crear el registro',500, $e->getMessage());
         } catch (Throwable $e) {
@@ -59,25 +58,25 @@ class GenderController extends Controller
     }
 
     /**
-     * Muestra un género específica.
+     * Muestra una empresa específica.
      */
-    public function show(Gender $gender):JsonResponse
+    public function show(Enterprise $enterprise):JsonResponse
     {
         try {
-            return $this->successResponse(new GenderResource($gender),'Registro Obtenido Exitosamente');
+            return $this->successResponse(new EnterpriseResource($enterprise),'Registro Obtenido Exitosamente');
         } catch (Throwable $e) {
             return $this->errorResponse('Error al mostrar el registro',500,$e->getMessage());
         }
     }
 
     /**
-     * Actualiza un género existente.
+     * Actualiza una empresa existente.
      */
-    public function update(UpdateGenderRequest $request, Gender $gender):JsonResponse
+    public function update(UpdateEnterpriseRequest $request, Enterprise $enterprise):JsonResponse
     {
         try {
-            $gender->update($request->validated());
-            return $this->successResponse(new GenderResource($gender),'Registro actualizado exitosamente');
+            $enterprise->update($request->validated());
+            return $this->successResponse(new EnterpriseResource($enterprise),'Registro actualizado exitosamente');
         } catch (QueryException $e) {
             return $this->errorResponse('Error de base de datos al actualizar el registro',500, $e->getMessage());
         } catch (Throwable $e) {
@@ -86,12 +85,12 @@ class GenderController extends Controller
     }
 
     /**
-     * Elimina un género.
+     * Elimina una empresa.
      */
-    public function destroy(Gender $gender):JsonResponse
+    public function destroy(Enterprise $enterprise):JsonResponse
     {
         try {
-            $gender->delete();
+            $enterprise->delete();
             return $this->successResponse(null,'Registro eliminado exitosamente');
         } catch (QueryException $e) {
             return $this->errorResponse('Error de base de datos al eliminar el registro',500, $e->getMessage());
@@ -100,3 +99,4 @@ class GenderController extends Controller
         }
     }
 }
+

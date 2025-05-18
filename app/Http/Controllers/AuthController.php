@@ -28,7 +28,7 @@ class AuthController extends Controller
             'name'=>$request->get('name'),
             'role'=>$request->get('role'),
             'email'=>$request->get('email'),
-            'password'=>bcrypt($request->get('pasword')),
+            'password'=>bcrypt($request->get('password')),
         ]);
         return response()->json(['message'=>'User Created Succesfully'],201);
     }
@@ -67,3 +67,6 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged Out succesfully!'],200); 
     }
 }
+
+
+// AGREGAR FUNCIÓN DESTROY USER, BASICAMENTE LAS FUNCIONES DE CRUD BÁSICAS, INDEX, UPDATE Y DESTROY.
