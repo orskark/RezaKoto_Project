@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\FilterDTO;
-use App\Http\Requests\CreateBrandRequest;
-use App\Http\Requests\UpdateBrandRequest;
-use App\Http\Resources\BrandResource;
-use App\Models\Brand;
+use App\Http\Requests\CreateEnterpriseTypeRequest;
+use App\Http\Requests\UpdateEnterpriseTypeRequest;
+use App\Http\Resources\EnterpriseTypeResource;
+use App\Models\EnterpriseType;
 use App\Services\PaginateRegistersService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Database\QueryException;
@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Throwable;
 
-class BrandController extends Controller
+class EnterpriseTypeController extends Controller
 {
     use ApiResponseTrait;
     protected array $searchables = ['name'];
@@ -23,15 +23,15 @@ class BrandController extends Controller
         protected PaginateRegistersService $pagination
     ) {}
     /**
-     * Muestra todas las marcas.
+     * Muestra todos los tipos de empresa.
      */
     public function index(Request $request):JsonResponse
     {
         try {
             $dto = FilterDTO::fromRequest($request->all());
-            $results = $this->pagination->execute(Brand::query(), $dto, $this->searchables);
+            $results = $this->pagination->execute(EnterpriseType::query(), $dto, $this->searchables);
             $data = [
-                'items' => BrandResource::collection($results),
+                'items' => EnterpriseTypeResource::collection($results),
                 'pagination' => ['current_page' => $results->currentPage(), 'per_page' => $results->perPage(), 'total' => $results->total(), 'last_page' => $results->lastPage()],
             ];
             return $this->successResponse($data,'Registros Obtenidos Exitosamente');
@@ -42,13 +42,13 @@ class BrandController extends Controller
     }
 
     /**
-     * Guarda una nueva marca en la base de datos.
+     * Guarda un nuevo tipo de empresa en la base de datos.
      */
-    public function store(CreateBrandRequest $request):JsonResponse
+    public function store(CreateEnterpriseTypeRequest $request):JsonResponse
     { 
         try {
-            $model = Brand::create($request->validated());
-            return $this->successResponse(new BrandResource($model),'Registro Creado Exitosamente',201);
+            $model = EnterpriseType::create($request->validated());
+            return $this->successResponse(new EnterpriseTypeResource($model),'Registro Creado Exitosamente',201);
         } catch (QueryException $e) {
             return $this->errorResponse('Error de base de datos al crear el registro',500, $e->getMessage());
         } catch (Throwable $e) {
@@ -58,25 +58,25 @@ class BrandController extends Controller
     }
 
     /**
-     * Muestra una marca específica.
+     * Muestra un tipo de empresa específica.
      */
-    public function show(Brand $brand):JsonResponse
+    public function show(EnterpriseType $enterpriseType):JsonResponse
     {
         try {
-            return $this->successResponse(new BrandResource($brand),'Registro Obtenido Exitosamente');
+            return $this->successResponse(new EnterpriseTypeResource($enterpriseType),'Registro Obtenido Exitosamente');
         } catch (Throwable $e) {
             return $this->errorResponse('Error al mostrar el registro',500,$e->getMessage());
         }
     }
 
     /**
-     * Actualiza una marca existente.
+     * Actualiza un tipo de empresa existente.
      */
-    public function update(UpdateBrandRequest $request, Brand $brand):JsonResponse
+    public function update(UpdateEnterpriseTypeRequest $request, EnterpriseType $enterpriseType):JsonResponse
     {
         try {
-            $brand->update($request->validated());
-            return $this->successResponse(new BrandResource($brand),'Registro actualizado exitosamente');
+            $enterpriseType->update($request->validated());
+            return $this->successResponse(new EnterpriseTypeResource($enterpriseType),'Registro actualizado exitosamente');
         } catch (QueryException $e) {
             return $this->errorResponse('Error de base de datos al actualizar el registro',500, $e->getMessage());
         } catch (Throwable $e) {
@@ -85,12 +85,12 @@ class BrandController extends Controller
     }
 
     /**
-     * Elimina una marca.
+     * Elimina un tipo de empresa.
      */
-    public function destroy(Brand $brand):JsonResponse
+    public function destroy(EnterpriseType $enterpriseType):JsonResponse
     {
         try {
-            $brand->delete();
+            $enterpriseType->delete();
             return $this->successResponse(null,'Registro eliminado exitosamente');
         } catch (QueryException $e) {
             return $this->errorResponse('Error de base de datos al eliminar el registro',500, $e->getMessage());
