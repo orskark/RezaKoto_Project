@@ -8,12 +8,16 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\EnterpriseController;
 use App\Http\Controllers\EnterpriseTypeController;
 use App\Http\Controllers\GenderController;
+use App\Http\Controllers\MovementTypeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductVariantImageController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsUserAuth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SizeController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\WarehouseController;
 use App\Models\Brand;
 use Illuminate\Http\Request;
@@ -35,6 +39,10 @@ Route::middleware([IsUserAuth::class])->group(function () {
     Route::apiResource('colors', ColorController::class);
     Route::apiResource('warehouse', WarehouseController::class);
     Route::apiResource('product_variant_images', ProductVariantImageController::class);
+    Route::apiResource('movement_type', MovementTypeController::class);
+    Route::apiResource('stock', StockController::class);
+    Route::apiResource('stock_movements', StockMovementController::class);
+    Route::apiResource('product_variants', ProductVariantController::class);
     Route::controller(AuthController::class)->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'getUser');
