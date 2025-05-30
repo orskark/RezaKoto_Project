@@ -9,6 +9,7 @@ use App\Http\Controllers\EnterpriseController;
 use App\Http\Controllers\EnterpriseTypeController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\MovementTypeController;
+use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductVariantImageController;
@@ -43,6 +44,7 @@ Route::middleware([IsUserAuth::class])->group(function () {
     Route::apiResource('stock', StockController::class);
     Route::apiResource('stock_movements', StockMovementController::class);
     Route::apiResource('product_variants', ProductVariantController::class);
+    Route::apiResource('order_details', OrderDetailController::class);
     Route::controller(AuthController::class)->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'getUser');
