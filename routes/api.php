@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\StatusController;
+use App\Http\Controllers\Api\UserRoleController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
@@ -21,23 +22,28 @@ use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductVariantImageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShippingStatusController;
-use App\Http\Middleware\IsAdmin;
-use App\Http\Middleware\IsUserAuth;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockMovementController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
-use App\Models\Brand;
-use Illuminate\Http\Request;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsUserAuth;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::apiResource('roles', RoleController::class);
+Route::apiResource('document_types', DocumentTypeController::class);
+Route::get('getIdByEmail',[AuthController::class,'getIdByEmail']);
+Route::apiResource('user_roles', UserRoleController::class);
+
+
+
 
 // Private Routes
-Route::middleware([IsUserAuth::class])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     Route::apiResource('genders', GenderController::class);
     Route::apiResource('statuses', StatusController::class);
     Route::apiResource('brands', BrandController::class);
@@ -59,8 +65,7 @@ Route::middleware([IsUserAuth::class])->group(function () {
     Route::apiResource('orders', OrderController::class);
     Route::apiResource('order_statuses', OrderStatusController::class);
     Route::apiResource('payment_methods', PaymentMethodController::class);
-    Route::apiResource('roles', RoleController::class);
-    Route::apiResource('document_types', DocumentTypeController::class);
+
     Route::controller(AuthController::class)->group(function () {
         Route::post('logout', 'logout');
         Route::get('me', 'getUser');
@@ -72,7 +77,7 @@ Route::middleware([IsUserAuth::class])->group(function () {
     Route::put('users/{id}', [UserController::class, 'update']);
 
     // Solo administradores
-    Route::middleware([IsAdmin::class])->group(function () {
+    Route::middleware(['is.admin'])->group(function () {
 
         // Rutas de gestión de usuarios (solo admins)
         Route::get('users', [UserController::class, 'index']);

@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class IsAdmin
 {
@@ -15,11 +17,17 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = auth('api')->user();
-        if($user && $user->role === 'admin'){
-            return $next ($request);
-        }else{
-            return response()->json(['Message' => 'You are not an admin'],403);
+        try {
+            $user = auth('api')->user();
+            $currentRoleId = JWTAuth::parseToken()->getPayload()->get('role_id');
+
+            if ($user && $currentRoleId == 1) {
+                return $next($request);
+            }
+
+            return response()->json(['message' => 'You are not an Admin'], 403);
+        } catch (JWTException $e) {
+            return response()->json(['message' => 'Unauthorized: ' . $e->getMessage()], 401);
         }
     }
 }
