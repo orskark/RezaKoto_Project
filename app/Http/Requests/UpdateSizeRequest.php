@@ -21,9 +21,14 @@ class UpdateSizeRequest extends FormRequest
      */
     public function rules(): array
     {
+        // $sizeId = $this->route('size')?->id;
         return [
-            'code' => 'sometimes|nullable|string|max:5|unique:sizes,code',
-	        'description' => 'sometimes|nullable|string|min:5|max:200',
+            'gender_id' => 'required|exists:genders,id',
+            'brand_id' => 'required|exists:brands,id',
+            'category_id' => 'required|exists:categories,id',
+            'code' => 'required|string|max:255',
+            'label' => 'sometimes|string|max:255',
+            'notes' => 'sometimes|nullable|string|max:255',
         ];
     }
 }

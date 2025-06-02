@@ -22,10 +22,12 @@ class CreateSizeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|max:5|unique:sizes,code',
-	        'description' => 'required|string|min:5|max:200',
+            'gender_id' => 'required|exists:genders,id',
+            'brand_id' => 'required|exists:brands,id',
+            'category_id' => 'required|exists:categories,id',
+            'code' => 'required|string|max:255',
+            'label' => 'required|string|max:255',
+            'notes' => 'sometimes|nullable|string|max:255',
         ];
     }
-
-    
 }
