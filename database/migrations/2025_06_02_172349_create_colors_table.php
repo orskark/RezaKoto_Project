@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_statuses', function (Blueprint $table) {
+        Schema::create('colors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('status_id')->nullable()->default(1);
+            $table->string('name', 255)->nullable();
             $table->timestamps();
+
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
         });
     }
 
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment_statuses');
+        Schema::dropIfExists('colors');
     }
 };

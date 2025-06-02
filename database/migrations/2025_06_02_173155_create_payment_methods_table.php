@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->longText('description');
+            $table->unsignedBigInteger('status_id')->nullable()->default(1);
+            $table->string('name', 255)->nullable();
             $table->timestamps();
+
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
         });
     }
 
@@ -24,6 +26,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('payment_methods');
     }
 };
+

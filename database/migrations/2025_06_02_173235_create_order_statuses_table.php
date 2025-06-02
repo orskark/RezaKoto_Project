@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stock', function (Blueprint $table) {
+        Schema::create('order_statuses', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantity');
-            $table->integer('reserved_quantity');
-            $table->integer('minimum_quantity');
-            $table->string('status');
+            $table->unsignedBigInteger('status_id')->nullable()->default(1);
+            $table->string('name', 255)->nullable();
             $table->timestamps();
+
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
         });
     }
 
@@ -26,6 +26,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stock');
+        Schema::dropIfExists('order_statuses');
     }
 };
+

@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_variant_images', function (Blueprint $table) {
+        Schema::create('movement_types', function (Blueprint $table) {
             $table->id();
-            $table->longText('image_route');
+            $table->unsignedBigInteger('status_id')->nullable()->default(1);
+            $table->string('name', 255)->nullable();
             $table->timestamps();
+
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
         });
     }
 
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_variant_images');
+        Schema::dropIfExists('movement_types');
     }
 };

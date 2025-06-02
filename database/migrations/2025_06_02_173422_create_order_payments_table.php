@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('order_payments', function (Blueprint $table) {
             $table->id();
-            $table->float('value');
-            $table->string('transaction_reference');
-            $table->text('notes');
+            $table->unsignedBigInteger('status_id')->nullable()->default(1);
+            $table->unsignedBigInteger('order_id')->nullable();
+            $table->integer('value')->nullable();
+            $table->string('transaction_reference', 255)->nullable();
+            $table->longText('notes')->nullable();
             $table->timestamps();
+
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('set null');
         });
     }
 

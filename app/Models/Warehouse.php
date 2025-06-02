@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Warehouse extends Model
 {
-    protected $fillable = ['name','address'];
+    protected $guarded = [];
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class, 'warehouse_id');
+    }
 }

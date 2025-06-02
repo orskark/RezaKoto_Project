@@ -6,5 +6,40 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['total_value','mailing_address'];
+    protected $guarded = [];
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function payment_method()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
+    }
+
+    public function order_status()
+    {
+        return $this->belongsTo(OrderStatus::class, 'order_status_id');
+    }
+
+    public function order_details()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id');
+    }
+
+    public function order_shippings()
+    {
+        return $this->hasMany(OrderShipping::class, 'order_id');
+    }
+
+    public function order_payments()
+    {
+        return $this->hasMany(OrderPayment::class, 'order_id');
+    }
 }

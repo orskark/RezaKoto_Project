@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderPayment extends Model
 {
-    protected $fillable = ['value','transaction_reference','notes'];
+    protected $guarded = [];
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 }

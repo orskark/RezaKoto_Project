@@ -19,10 +19,14 @@ class User extends Authenticatable implements JWTSubject
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'role',
+        'complete_name',
         'email',
         'password',
+        'identification',
+        'phone_number',
+        'address',
+        'document_type_id',
+        'status_id'
     ];
 
     /**
@@ -48,13 +52,44 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+     /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
 
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    // RELACIONES
+    public function document_type()
+    {
+        return $this->belongsTo(DocumentType::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id');
     }
 }

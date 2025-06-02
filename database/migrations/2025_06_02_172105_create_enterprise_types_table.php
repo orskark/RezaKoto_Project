@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_details', function (Blueprint $table) {
+        Schema::create('enterprise_types', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantity');
-            $table->integer('unit_price');
-            $table->integer('subtotal');
-            $table->longText('product_snapshot_json');
+            $table->unsignedBigInteger('status_id')->nullable()->default(1);
+            $table->string('name', 255);
+            $table->longText('description');
             $table->timestamps();
+
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_details');
+        Schema::dropIfExists('enterprise_types');
     }
 };

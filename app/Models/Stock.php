@@ -6,5 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stock extends Model
 {
-    protected $fillable = ['quantity','reserved_quantity','minimum_quantity'];
+    protected $guarded = [];
+
+    public function product_variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+    }
+
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function stock_movements()
+    {
+        return $this->hasMany(StockMovement::class, 'stock_id');
+    }
 }
