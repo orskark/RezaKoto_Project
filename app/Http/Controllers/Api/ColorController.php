@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateColorRequest;
 use App\Http\Requests\UpdateColorRequest;
 use App\Http\Resources\ColorResource;
@@ -38,14 +39,14 @@ class ColorController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nueva color en la base de datos.
      */
     public function store(CreateColorRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = Color::create($request->validated());
             return $this->successResponse(new ColorResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class ColorController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

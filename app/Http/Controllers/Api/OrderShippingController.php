@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderShippingRequest;
 use App\Http\Requests\UpdateOrderShippingRequest;
 use App\Http\Resources\OrderShippingResource;
@@ -38,14 +39,14 @@ class OrderShippingController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo detalle de la orden en la base de datos.
      */
     public function store(CreateOrderShippingRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = OrderShipping::create($request->validated());
             return $this->successResponse(new OrderShippingResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class OrderShippingController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

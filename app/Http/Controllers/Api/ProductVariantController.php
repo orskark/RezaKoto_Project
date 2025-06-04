@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductVariantRequest;
 use App\Http\Requests\UpdateProductVariantRequest;
 use App\Http\Resources\ProductVariantResource;
@@ -38,14 +39,14 @@ class ProductVariantController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda una nueva variante de producto en la base de datos.
      */
     public function store(CreateProductVariantRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = ProductVariant::create($request->validated());
             return $this->successResponse(new ProductVariantResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class ProductVariantController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

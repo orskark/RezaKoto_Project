@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateMovementTypeRequest;
 use App\Http\Requests\UpdateMovementTypeRequest;
 use App\Http\Resources\MovementTypeResource;
@@ -38,14 +39,14 @@ class MovementTypeController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo tipo de movimiento en la base de datos.
      */
     public function store(CreateMovementTypeRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = MovementType::create($request->validated());
             return $this->successResponse(new MovementTypeResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class MovementTypeController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

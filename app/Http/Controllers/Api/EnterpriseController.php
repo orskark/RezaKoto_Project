@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateEnterpriseRequest;
 use App\Http\Requests\UpdateEnterpriseRequest;
 use App\Http\Resources\EnterpriseResource;
@@ -38,14 +39,14 @@ class EnterpriseController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda una nueva empresa en la base de datos.
      */
     public function store(CreateEnterpriseRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = Enterprise::create($request->validated());
             return $this->successResponse(new EnterpriseResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class EnterpriseController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

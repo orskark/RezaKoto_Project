@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
@@ -60,7 +60,7 @@ class ProductController extends Controller
             $product->price = $request->price;
         }
         $product->update();
-        return response()->json(['message' => 'Product updated succesfully!'],200); 
+        return response()->json(['message' => 'Product updated succesfully!'],200);
     }
 
     public function deleteProductById($id){

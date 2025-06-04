@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateSizeRequest;
 use App\Http\Requests\UpdateSizeRequest;
 use App\Http\Resources\SizeResource;
@@ -38,14 +39,14 @@ class SizeController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda una nueva talla en la base de datos.
      */
     public function store(CreateSizeRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = Size::create($request->validated());
             return $this->successResponse(new SizeResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class SizeController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

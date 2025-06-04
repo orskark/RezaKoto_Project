@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreatePaymentMethodRequest;
 use App\Http\Requests\UpdatePaymentMethodRequest;
 use App\Http\Resources\PaymentMethodResource;
@@ -38,14 +39,14 @@ class PaymentMethodController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo método de pago en la base de datos.
      */
     public function store(CreatePaymentMethodRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = PaymentMethod::create($request->validated());
             return $this->successResponse(new PaymentMethodResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class PaymentMethodController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

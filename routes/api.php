@@ -3,32 +3,30 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\UserRoleController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\DocumentTypeController;
-use App\Http\Controllers\EnterpriseController;
-use App\Http\Controllers\EnterpriseTypeController;
-use App\Http\Controllers\GenderController;
-use App\Http\Controllers\MovementTypeController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderDetailController;
-use App\Http\Controllers\OrderShippingController;
-use App\Http\Controllers\OrderStatusController;
-use App\Http\Controllers\PaymentMethodController;
-use App\Http\Controllers\PaymentStatusController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProductVariantController;
-use App\Http\Controllers\ProductVariantImageController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ShippingStatusController;
-use App\Http\Controllers\SizeController;
-use App\Http\Controllers\StockController;
-use App\Http\Controllers\StockMovementController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\WarehouseController;
-use App\Http\Middleware\IsAdmin;
-use App\Http\Middleware\IsUserAuth;
+use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ColorController;
+use App\Http\Controllers\Api\DocumentTypeController;
+use App\Http\Controllers\Api\EnterpriseController;
+use App\Http\Controllers\Api\EnterpriseTypeController;
+use App\Http\Controllers\Api\GenderController;
+use App\Http\Controllers\Api\MovementTypeController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\OrderDetailController;
+use App\Http\Controllers\Api\OrderShippingController;
+use App\Http\Controllers\Api\OrderStatusController;
+use App\Http\Controllers\Api\PaymentMethodController;
+use App\Http\Controllers\Api\PaymentStatusController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductVariantController;
+use App\Http\Controllers\Api\ProductVariantImageController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\ShippingStatusController;
+use App\Http\Controllers\Api\SizeController;
+use App\Http\Controllers\Api\StockController;
+use App\Http\Controllers\Api\StockMovementController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -38,6 +36,8 @@ Route::apiResource('roles', RoleController::class);
 Route::apiResource('document_types', DocumentTypeController::class);
 Route::get('getIdByEmail',[AuthController::class,'getIdByEmail']);
 Route::apiResource('user_roles', UserRoleController::class);
+Route::apiResource('statuses', StatusController::class);
+
 
 
 
@@ -45,7 +45,6 @@ Route::apiResource('user_roles', UserRoleController::class);
 // Private Routes
 Route::middleware(['auth:api'])->group(function () {
     Route::apiResource('genders', GenderController::class);
-    Route::apiResource('statuses', StatusController::class);
     Route::apiResource('brands', BrandController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('sizes', SizeController::class);

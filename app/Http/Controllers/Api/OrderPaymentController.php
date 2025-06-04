@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateOrderPaymentRequest;
 use App\Http\Requests\UpdateOrderPaymentRequest;
 use App\Http\Resources\OrderPaymentResource;
@@ -38,14 +39,14 @@ class OrderPaymentController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo detalle de la orden en la base de datos.
      */
     public function store(CreateOrderPaymentRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = OrderPayment::create($request->validated());
             return $this->successResponse(new OrderPaymentResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class OrderPaymentController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateDocumentTypeRequest;
 use App\Http\Requests\UpdateDocumentTypeRequest;
 use App\Http\Resources\DocumentTypeResource;
@@ -38,14 +39,14 @@ class DocumentTypeController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo tipo de documento en la base de datos.
      */
     public function store(CreateDocumentTypeRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = DocumentType::create($request->validated());
             return $this->successResponse(new DocumentTypeResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class DocumentTypeController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

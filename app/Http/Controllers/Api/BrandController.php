@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
 use App\Http\Resources\BrandResource;
@@ -38,14 +39,14 @@ class BrandController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda una nueva marca en la base de datos.
      */
     public function store(CreateBrandRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = Brand::create($request->validated());
             return $this->successResponse(new BrandResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class BrandController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

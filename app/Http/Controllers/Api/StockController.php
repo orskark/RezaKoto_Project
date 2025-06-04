@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateStockRequest;
 use App\Http\Requests\UpdateStockRequest;
 use App\Http\Resources\StockResource;
@@ -38,14 +39,14 @@ class StockController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo stock en la base de datos.
      */
     public function store(CreateStockRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = Stock::create($request->validated());
             return $this->successResponse(new StockResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class StockController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

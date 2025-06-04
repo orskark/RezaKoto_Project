@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductvariantImageRequest;
 use App\Http\Requests\UpdateProductvariantImageRequest;
 use App\Http\Resources\ProductVariantImageResource;
@@ -38,14 +39,14 @@ class ProductVariantImageController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nueva color en la base de datos.
      */
     public function store(CreateProductvariantImageRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = ProductVariantImage::create($request->validated());
             return $this->successResponse(new ProductVariantImageResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class ProductVariantImageController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

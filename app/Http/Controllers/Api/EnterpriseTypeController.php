@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateEnterpriseTypeRequest;
 use App\Http\Requests\UpdateEnterpriseTypeRequest;
 use App\Http\Resources\EnterpriseTypeResource;
@@ -38,14 +39,14 @@ class EnterpriseTypeController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo tipo de empresa en la base de datos.
      */
     public function store(CreateEnterpriseTypeRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = EnterpriseType::create($request->validated());
             return $this->successResponse(new EnterpriseTypeResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class EnterpriseTypeController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

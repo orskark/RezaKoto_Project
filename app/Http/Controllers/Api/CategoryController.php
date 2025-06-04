@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
@@ -38,14 +39,14 @@ class CategoryController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda una nueva categoría en la base de datos.
      */
     public function store(CreateCategoryRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = Category::create($request->validated());
             return $this->successResponse(new CategoryResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class CategoryController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

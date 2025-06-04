@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
 use App\Http\Controllers\Controller;
@@ -39,14 +39,14 @@ class GenderController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo género en la base de datos.
      */
     public function store(CreateGenderRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = Gender::create($request->validated());
             return $this->successResponse(new GenderResource($model),'Registro Creado Exitosamente',201);
@@ -55,7 +55,7 @@ class GenderController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

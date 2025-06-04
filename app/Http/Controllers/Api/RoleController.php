@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Http\Resources\RoleResource;
@@ -38,14 +39,14 @@ class RoleController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo rol en la base de datos.
      */
     public function store(CreateRoleRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = Role::create($request->validated());
             return $this->successResponse(new RoleResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class RoleController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**

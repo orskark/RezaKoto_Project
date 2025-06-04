@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\FilterDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateShippingStatusRequest;
 use App\Http\Requests\UpdateShippingStatusRequest;
 use App\Http\Resources\ShippingStatusResource;
@@ -38,14 +39,14 @@ class ShippingStatusController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
         }
-        
+
     }
 
     /**
      * Guarda un nuevo estado de envío en la base de datos.
      */
     public function store(CreateShippingStatusRequest $request):JsonResponse
-    { 
+    {
         try {
             $model = ShippingStatus::create($request->validated());
             return $this->successResponse(new ShippingStatusResource($model),'Registro Creado Exitosamente',201);
@@ -54,7 +55,7 @@ class ShippingStatusController extends Controller
         } catch (Throwable $e) {
             return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
         }
-            
+
     }
 
     /**
