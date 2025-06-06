@@ -19,6 +19,8 @@ class StockResource extends JsonResource
             'quantity'              => $this->quantity,
             'reserved_quantity'     => $this->quantity,
             'minimum_quantity'      => $this->quantity,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

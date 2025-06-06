@@ -18,7 +18,9 @@ class OrderPaymentResource extends JsonResource
             'id'                   => $this->id,
             'value'                => $this->value,
             'transaction_reference'=> $this->transaction_reference,
-            'notes'                => $this->notes,   
+            'notes'                => $this->notes,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

@@ -18,6 +18,8 @@ class WarehouseResource extends JsonResource
         'id'          => $this->id,
         'name'        => $this->name,
         'address'     => $this->address,
+        'created_at' => $this->created_at->toDateTimeString(),
+        'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

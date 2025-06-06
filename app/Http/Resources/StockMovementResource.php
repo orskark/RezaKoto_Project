@@ -18,6 +18,8 @@ return [
             'id'                    => $this->id,
             'quantity'              => $this->quantity,
             'reason'                => $this->reason,
-        ];   
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
+        ];
     }
 }

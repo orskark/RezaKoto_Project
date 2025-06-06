@@ -20,6 +20,8 @@ return [
             'unit_price'            => $this->unit_price,
             'subtotal'              => $this->subtotal,
             'product_snapshot_json' => $this->product_snapshot_json,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }
