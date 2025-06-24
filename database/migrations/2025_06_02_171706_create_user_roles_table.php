@@ -12,12 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_roles', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('role_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
-            $table->unique(['user_id', 'role_id']);
-        });
+    $table->increments('id');
+
+    $table->unsignedInteger('user_id');
+    $table->unsignedInteger('role_id');
+
+    $table->timestamps();
+    $table->unique(['user_id', 'role_id']);
+
+    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+    $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+});
+
+
     }
 
     /**

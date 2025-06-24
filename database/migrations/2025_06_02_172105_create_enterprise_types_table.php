@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('enterprise_types', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('status_id')->nullable()->default(1);
-            $table->string('name', 255);
+            $table->increments('id');
+            $table->unsignedInteger('status_id')->nullable()->default(1);
+            $table->string('name', 50);
             $table->longText('description');
             $table->timestamps();
 

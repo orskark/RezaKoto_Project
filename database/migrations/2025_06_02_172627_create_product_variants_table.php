@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_variants', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('status_id')->nullable()->default(1);
-            $table->unsignedBigInteger('product_id')->nullable();
-            $table->unsignedBigInteger('size_id')->nullable();
-            $table->unsignedBigInteger('color_id')->nullable();
-            $table->string('sku', 255)->nullable();
+            $table->increments('id');
+            $table->unsignedInteger('status_id')->nullable()->default(1);
+            $table->unsignedInteger('product_id')->nullable();
+            $table->unsignedInteger('size_id')->nullable();
+            $table->unsignedInteger('color_id')->nullable();
+            $table->string('sku', 50)->nullable();
             $table->timestamps();
 
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');

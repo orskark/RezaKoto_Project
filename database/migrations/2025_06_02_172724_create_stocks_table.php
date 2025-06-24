@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('stocks', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('status_id')->nullable()->default(1);
-            $table->unsignedBigInteger('product_variant_id')->nullable();
+            $table->increments('id');
+            $table->unsignedInteger('status_id')->nullable()->default(1);
+            $table->unsignedInteger('product_variant_id')->nullable();
             $table->integer('quantity')->nullable()->default(0);
             $table->integer('reserved_quantity')->nullable()->default(0);
             $table->integer('minimum_quantity')->nullable()->default(0);

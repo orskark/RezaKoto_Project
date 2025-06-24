@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('genders', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 255);
-            $table->unsignedBigInteger('status_id')->nullable();
+            $table->increments('id');
+            $table->string('name', 50);
+            $table->unsignedInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
             $table->timestamps();
         });

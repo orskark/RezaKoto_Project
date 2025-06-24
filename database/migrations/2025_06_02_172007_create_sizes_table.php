@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sizes', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('status_id')->nullable()->default(1);
-            $table->unsignedBigInteger('gender_id')->nullable();
-            $table->unsignedBigInteger('brand_id')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->string('code', 255);
-            $table->string('label', 255);
+            $table->increments('id');
+            $table->unsignedInteger('status_id')->nullable()->default(1);
+            $table->unsignedInteger('gender_id')->nullable();
+            $table->unsignedInteger('brand_id')->nullable();
+            $table->unsignedInteger('category_id')->nullable();
+            $table->string('code', 50);
+            $table->string('label', 50);
             $table->text('notes')->nullable()->default(null);
             $table->timestamps();
 

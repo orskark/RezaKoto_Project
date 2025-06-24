@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_shippings', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('status_id')->nullable()->default(1);
-            $table->unsignedBigInteger('order_id')->nullable();
-            $table->unsignedBigInteger('enterprise_id')->nullable();
-            $table->unsignedBigInteger('shipping_status_id')->nullable();
+            $table->increments('id');
+            $table->unsignedInteger('status_id')->nullable()->default(1);
+            $table->unsignedInteger('order_id')->nullable();
+            $table->unsignedInteger('enterprise_id')->nullable();
+            $table->unsignedInteger('shipping_status_id')->nullable();
             $table->timestamp('delivery_date')->nullable();
             $table->timestamps();
 

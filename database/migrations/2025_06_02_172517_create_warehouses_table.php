@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('warehouses', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('status_id')->nullable()->default(1);
-            $table->string('name', 255)->nullable();
-            $table->string('address', 255)->nullable();
+            $table->increments('id');
+            $table->unsignedInteger('status_id')->nullable()->default(1);
+            $table->string('name', 50)->nullable();
+            $table->string('address', 50)->nullable();
             $table->timestamps();
 
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');

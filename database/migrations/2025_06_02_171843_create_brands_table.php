@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('brands', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 255);
+            $table->increments('id');
+            $table->string('name', 50);
             $table->longText('description');
-            $table->unsignedBigInteger('status_id')->nullable();
+            $table->unsignedInteger('status_id')->nullable();
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
             $table->timestamps();
         });
