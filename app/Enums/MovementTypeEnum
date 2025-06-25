@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Enums;
+
+enum MovementTypeEnum: int
+{
+    case Inbound = 1;
+    case Outbound = 2;
+
+    public function label(): string
+    {
+        return match($this) {
+            self::Inbound => 'Entrada',
+            self::Outbound => 'Salida',
+        };
+    }
+}

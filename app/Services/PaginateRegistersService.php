@@ -33,7 +33,7 @@ class PaginateRegistersService
 
         // Filtros
         foreach ($dto->filters as $key => $value) {
-            if (in_array($key, $filterables) && $this->isColumnValid($model, $key)) {
+            if (in_array($key, $filterables) && $this->isColumnValid($model, $key) && $value != null) {
                 $query->where($key, $value);
             }
         }

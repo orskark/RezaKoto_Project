@@ -3,71 +3,103 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\CreateProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductResource;
+use App\Models\Product;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
+use Throwable;
+use App\Traits\ApiResponseTrait;
+use App\DTOs\FilterDTO;
+use App\Services\PaginateRegistersService;
 
 class ProductController extends Controller
 {
-    public function addProduct(Request $request){
-        $validator = Validator::make($request->all(),[
-            'name' => 'required|string|min:10|max:100',
-            'price' => 'required|numeric',
-        ]);
-        if($validator->fails()){
-            return response()->json(['error' => $validator->errors()],422);
+    use ApiResponseTrait;
+
+    protected array $searchables = ['name'];
+    protected array $filterables = ['brand_id', 'gender_id', 'category_id', 'enterprise_id', 'status_id'];
+    protected array $relationSearchables = [
+        'brand'      => 'name',
+        'gender'     => 'name',
+        'category'   => 'name',
+        'enterprise' => 'name',
+    ];
+
+    public function __construct(
+        protected PaginateRegistersService $pagination
+    ) {}
+
+    public function index(Request $request): JsonResponse
+    {
+        try {
+            $dto = FilterDTO::fromRequest($request->all());
+            $results = $this->pagination->execute(Product::query(), $dto, $this->searchables, $this->filterables, $this->relationSearchables);
+            $data = [
+                'items' => ProductResource::collection($results),
+                'pagination' => ['current_page' => $results->currentPage(), 'per_page' => $results->perPage(), 'total' => $results->total(), 'last_page' => $results->lastPage()],
+            ];
+            return $this->successResponse($data, 'Registros obtenidos exitosamente.');
+        } catch (Throwable $e) {
+            return $this->errorResponse('Error al obtener los registros.', 500, $e->getMessage());
         }
-        Product::create([
-            'name'=>$request->get('name'),
-            'price'=>$request->get('price'),
-        ]);
-        return response()->json(['message'=>'Product Added Succesfully'],201);
     }
 
-    public function getProducts(){
-        $products = Product::all();
-        if($products->isEmpty()){
-            return response()->json(['message' => 'No Products Found'],404);
+    public function store(CreateProductRequest $request): JsonResponse
+    {
+        try {
+            $product = Product::create($request->validated());
+            return $this->successResponse(new ProductResource($product), 'Registro creado éxitosamente.', 201);
+        } catch (QueryException $e) {
+            return $this->errorResponse('Error de base de datos al crear el registro.', 500, $e->getMessage());
+        } catch (Throwable $e) {
+            return $this->errorResponse('Error al crear el registro.', 500, $e->getMessage());
         }
-        return response()->json($products, 200);
     }
 
-    public function getProductById($id){
-        $product = Product::find($id);
-        if(!$product){
-            return response()->json(['message' => 'No Products Found'],404);
+    public function show(Product $product): JsonResponse
+    {
+        try {
+            return $this->successResponse(new ProductResource($product), 'Registro obtenido éxitosamente.');
+        } catch (Throwable $e) {
+            return $this->errorResponse('Error al obtener el registro.', 500, $e->getMessage());
         }
-        return response()->json($product,200);
     }
 
-    public function updateProductById(Request $request, $id){
-        $product = Product::find($id);
-        if(!$product){
-            return response()->json(['message' => 'No Products Found'],404);
+    public function update(UpdateProductRequest $request, Product $product): JsonResponse
+    {
+        try {
+            $product->update($request->validated());
+            return $this->successResponse(new ProductResource($product), 'Registro actualizado correctamente.');
+        } catch (QueryException $e) {
+            return $this->errorResponse('Error de base de datos al actualizar el registro.', 500, $e->getMessage());
+        } catch (Throwable $e) {
+            return $this->errorResponse('Error al actualizar el registro.', 500, $e->getMessage());
         }
-        $validator = Validator::make($request->all(),[
-            'name' => 'sometimes|string|min:10|max:100',
-            'price' => 'sometimes|numeric',
-        ]);
-        if($validator->fails()){
-            return response()->json(['error' => $validator->errors()],422);
-        }
-        if ($request->has('name')){
-            $product->name = $request->name;
-        }
-
-        if ($request->has('price')){
-            $product->price = $request->price;
-        }
-        $product->update();
-        return response()->json(['message' => 'Product updated succesfully!'],200);
     }
 
-    public function deleteProductById($id){
-        $product = Product::find($id);
-        if(!$product){
-            return response()->json(['message' => 'No Products Found'],404);
+    public function destroy(Product $product): JsonResponse
+    {
+        try {
+            $product->delete();
+            return $this->successResponse(null, 'Registro eliminado éxitosamente.', 204);
+        } catch (QueryException $e) {
+            return $this->errorResponse('Error de base de datos al eliminar el registro.', 500, $e->getMessage());
+        } catch (Throwable $e) {
+            return $this->errorResponse('Error al eliminar el registro.', 500, $e->getMessage());
         }
-        $product->delete();
+    }
+
+    public function toggleStatus(Product $product): JsonResponse
+    {
+        try {
+            $product->status_id = $product->status_id == 1 ? 2 : 1;
+            $product->save();
+            return $this->successResponse($product, 'Registro actualizado éxitosamente');
+        } catch (Throwable $e) {
+            return $this->errorResponse('Error al actualizar el registro.', 500, $e->getMessage());
+        }
     }
 }

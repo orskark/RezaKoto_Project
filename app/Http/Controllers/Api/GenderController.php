@@ -9,94 +9,95 @@ use App\Http\Requests\UpdateGenderRequest;
 use App\Http\Resources\GenderResource;
 use App\Models\Gender;
 use App\Services\PaginateRegistersService;
+use Illuminate\Http\Request;
 use App\Traits\ApiResponseTrait;
+use Throwable;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Throwable;
 
 class GenderController extends Controller
 {
     use ApiResponseTrait;
+
     protected array $searchables = ['name'];
+    protected array $filterables = ['status_id'];
 
     public function __construct(
         protected PaginateRegistersService $pagination
     ) {}
-    /**
-     * Muestra todos los géneros.
-     */
-    public function index(Request $request):JsonResponse
+
+    public function index(Request $request): JsonResponse
     {
         try {
             $dto = FilterDTO::fromRequest($request->all());
-            $results = $this->pagination->execute(Gender::query(), $dto, $this->searchables);
+            $query = Gender::query();
+            $results = $this->pagination->execute($query, $dto, $this->searchables, $this->filterables);
             $data = [
                 'items' => GenderResource::collection($results),
-                'pagination' => ['current_page' => $results->currentPage(), 'per_page' => $results->perPage(), 'total' => $results->total(), 'last_page' => $results->lastPage()],
+                'pagination' => [
+                    'current_page' => $results->currentPage(),
+                    'per_page' => $results->perPage(),
+                    'total' => $results->total(),
+                    'last_page' => $results->lastPage(),
+                ],
             ];
-            return $this->successResponse($data,'Registros Obtenidos Exitosamente');
+            return $this->successResponse($data, 'Registros obtenidos exitosamente.');
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
+            return $this->errorResponse('Error al obtener los registros.', 500, $e->getMessage());
         }
-
     }
 
-    /**
-     * Guarda un nuevo género en la base de datos.
-     */
-    public function store(CreateGenderRequest $request):JsonResponse
+    public function store(CreateGenderRequest $request): JsonResponse
     {
         try {
-            $model = Gender::create($request->validated());
-            return $this->successResponse(new GenderResource($model),'Registro Creado Exitosamente',201);
+            $gender = Gender::create($request->validated());
+            return $this->successResponse(new GenderResource($gender), 'Registro creado exitosamente.', 201);
         } catch (QueryException $e) {
-            return $this->errorResponse('Error de base de datos al crear el registro',500, $e->getMessage());
+            return $this->errorResponse('Error al crear el registro.', 500, $e->getMessage());
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
+            return $this->errorResponse('Ha ocurrido un error inesperado.', 500, $e->getMessage());
         }
-
     }
 
-    /**
-     * Muestra un género específica.
-     */
-    public function show(Gender $gender):JsonResponse
+    public function show(Gender $gender): JsonResponse
     {
         try {
-            return $this->successResponse(new GenderResource($gender),'Registro Obtenido Exitosamente');
+            $resource = new GenderResource($gender);
+            return $this->successResponse($resource, 'Registro obtenido exitosamente.');
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al mostrar el registro',500,$e->getMessage());
+            return $this->errorResponse('Error al obtener el registro.', 500, $e->getMessage());
         }
     }
 
-    /**
-     * Actualiza un género existente.
-     */
-    public function update(UpdateGenderRequest $request, Gender $gender):JsonResponse
+    public function update(UpdateGenderRequest $request, Gender $gender): JsonResponse
     {
         try {
             $gender->update($request->validated());
-            return $this->successResponse(new GenderResource($gender),'Registro actualizado exitosamente');
-        } catch (QueryException $e) {
-            return $this->errorResponse('Error de base de datos al actualizar el registro',500, $e->getMessage());
+            $resource = new GenderResource($gender);
+            return $this->successResponse($resource, 'Registro actualizado exitosamente.');
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al actualizar el registro',500, $e->getMessage());
+            return $this->errorResponse('Error al actualizar el registro.', 500, $e->getMessage());
         }
     }
 
-    /**
-     * Elimina un género.
-     */
-    public function destroy(Gender $gender):JsonResponse
+    public function destroy(Gender $gender): JsonResponse
     {
         try {
             $gender->delete();
-            return $this->successResponse(null,'Registro eliminado exitosamente');
-        } catch (QueryException $e) {
-            return $this->errorResponse('Error de base de datos al eliminar el registro',500, $e->getMessage());
+            return $this->successResponse(null, 'Registro eliminado exitosamente.', 204);
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al eliminar el registro',500, $e->getMessage());
+            return $this->errorResponse('Error al eliminar el registro.', 500, $e->getMessage());
+        }
+    }
+
+    public function toggleStatus(Gender $gender): JsonResponse
+    {
+        try {
+            $gender->status_id = $gender->status_id == 1 ? 2 : 1;
+            $gender->save();
+            return $this->successResponse($gender, 'Registro actualizado éxitosamente');
+        } catch (Throwable $e) {
+            return $this->errorResponse('Error al actualizar el registro.', 500, $e->getMessage());
         }
     }
 }

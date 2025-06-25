@@ -25,7 +25,7 @@ class AuthController extends Controller
     use ApiResponseTrait;
 
     protected array $filterables = ['document_type_id', 'status_id'];
-    protected array $searchables = ['complete_name', 'email', 'identification', 'phone_number', 'address'];
+    protected array $searchables = ['first_name', 'middle_name', 'last_name', 'second_last_name', 'email', 'identification', 'phone_number', 'address'];
     protected array $relationSearchables = [
         'document_type' => ['name'],
         'roles' => ['name']
@@ -40,7 +40,10 @@ class AuthController extends Controller
     {
         try {
             $user = User::create([
-                'complete_name' => $request->input('complete_name'),
+                'first_name' => $request->input('first_name'),
+                'middle_name' => $request->input('middle_name'),
+                'last_name' => $request->input('last_name'),
+                'second_last_name' => $request->input('second_last_name'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
                 'identification' => $request->input('identification'),
@@ -50,6 +53,7 @@ class AuthController extends Controller
                 'status_id' => StatusEnum::Active->value
             ]);
 
+            // $roles = $request->input('roles');
             $roles = [2];
             $user->roles()->attach($roles);
 
@@ -72,7 +76,7 @@ class AuthController extends Controller
             }
 
             $user = auth('api')->user();
-            $first_name = $user->first_name;
+            $firstName = $user->first_name;
 
             if (!$user->roles->contains('id', $roleId)) {
                 return $this->errorResponse('Rol no autorizado.', 403);
@@ -81,7 +85,7 @@ class AuthController extends Controller
             $customClaims = ['role_id' => $roleId];
             $token = JWTAuth::claims($customClaims)->fromUser($user);
 
-            return $this->successResponse(['token' => $token, 'first_name' => $first_name, 'role_id' => $roleId], 'Acceso exitoso.', 200);
+            return $this->successResponse(['token' => $token, 'first_name' => $firstName, 'role_id' => $roleId], 'Acceso exitoso.', 200);
 
         } catch (JWTException $e) {
             return $this->errorResponse('No se pudo generar el token.', 500, $e->getMessage());
@@ -178,6 +182,17 @@ class AuthController extends Controller
             return $this->successResponse($userId, 'ID obtenido exitosamente');
         } catch (Throwable $e) {
             return $this->errorResponse('Error al obtener los registros.', 500, $e->getMessage());
+        }
+    }
+
+    public function toggleStatus(User $user): JsonResponse
+    {
+        try {
+            $user->status_id = $user->status_id == 1 ? 2 : 1;
+            $user->save();
+            return $this->successResponse($user, 'Registro actualizado éxitosamente');
+        } catch (Throwable $e) {
+            return $this->errorResponse('Error al actualizar el registro.', 500, $e->getMessage());
         }
     }
 }

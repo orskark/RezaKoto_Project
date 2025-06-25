@@ -2,101 +2,102 @@
 
 namespace App\Http\Controllers\Api;
 
+use Throwable;
 use App\DTOs\FilterDTO;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Traits\ApiResponseTrait;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
+use App\Http\Resources\CategoryResource;
+use App\Services\PaginateRegistersService;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use App\Http\Resources\CategoryResource;
-use App\Models\Category;
-use App\Services\PaginateRegistersService;
-use App\Traits\ApiResponseTrait;
-use Illuminate\Database\QueryException;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Throwable;
 
 class CategoryController extends Controller
 {
     use ApiResponseTrait;
+
+    protected array $filterables = ['status_id'];
     protected array $searchables = ['name'];
 
     public function __construct(
         protected PaginateRegistersService $pagination
     ) {}
-    /**
-     * Muestra todas las categorías.
-     */
-    public function index(Request $request):JsonResponse
+
+    public function index(Request $request): JsonResponse
     {
         try {
             $dto = FilterDTO::fromRequest($request->all());
-            $results = $this->pagination->execute(Category::query(), $dto, $this->searchables);
+            $query = Category::query();
+            $results = $this->pagination->execute($query, $dto, $this->searchables, $this->filterables);
             $data = [
                 'items' => CategoryResource::collection($results),
-                'pagination' => ['current_page' => $results->currentPage(), 'per_page' => $results->perPage(), 'total' => $results->total(), 'last_page' => $results->lastPage()],
+                'pagination' => [
+                    'current_page' => $results->currentPage(),
+                    'per_page' => $results->perPage(),
+                    'total' => $results->total(),
+                    'last_page' => $results->lastPage(),
+                ],
             ];
-            return $this->successResponse($data,'Registros Obtenidos Exitosamente');
+            return $this->successResponse($data, 'Registros obtenidos exitosamente.');
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al obtener los registros',500, $e->getMessage());
+            return $this->errorResponse('Error al obtener los registros.', 500, $e->getMessage());
         }
-
     }
 
-    /**
-     * Guarda una nueva categoría en la base de datos.
-     */
-    public function store(CreateCategoryRequest $request):JsonResponse
+    public function store(CreateCategoryRequest $request): JsonResponse
     {
         try {
-            $model = Category::create($request->validated());
-            return $this->successResponse(new CategoryResource($model),'Registro Creado Exitosamente',201);
+            $category = Category::create($request->validated());
+            return $this->successResponse(new CategoryResource($category), 'Registro creado exitosamente.', 201);
         } catch (QueryException $e) {
-            return $this->errorResponse('Error de base de datos al crear el registro',500, $e->getMessage());
+            return $this->errorResponse('Error al crear el registro.', 500, $e->getMessage());
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al crear el registro',500, $e->getMessage());
+            return $this->errorResponse('Ha ocurrido un error inesperado.', 500, $e->getMessage());
         }
-
     }
 
-    /**
-     * Muestra una categoría específica.
-     */
-    public function show(Category $category):JsonResponse
+    public function show(Category $category): JsonResponse
     {
         try {
-            return $this->successResponse(new CategoryResource($category),'Registro Obtenido Exitosamente');
+            $resource = new CategoryResource($category);
+            return $this->successResponse($resource, 'Registro obtenido exitosamente.');
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al mostrar el registro',500,$e->getMessage());
+            return $this->errorResponse('Error al obtener el registro.', 500, $e->getMessage());
         }
     }
 
-    /**
-     * Actualiza una categoría existente.
-     */
-    public function update(UpdateCategoryRequest $request, Category $category):JsonResponse
+    public function update(UpdateCategoryRequest $request, Category $category): JsonResponse
     {
         try {
             $category->update($request->validated());
-            return $this->successResponse(new CategoryResource($category),'Registro actualizado exitosamente');
-        } catch (QueryException $e) {
-            return $this->errorResponse('Error de base de datos al actualizar el registro',500, $e->getMessage());
+            $resource = new CategoryResource($category);
+            return $this->successResponse($resource, 'Registro actualizado exitosamente.');
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al actualizar el registro',500, $e->getMessage());
+            return $this->errorResponse('Error al actualizar el registro.', 500, $e->getMessage());
         }
     }
 
-    /**
-     * Elimina una categoría.
-     */
-    public function destroy(Category $category):JsonResponse
+    public function destroy(Category $category): JsonResponse
     {
         try {
             $category->delete();
-            return $this->successResponse(null,'Registro eliminado exitosamente');
-        } catch (QueryException $e) {
-            return $this->errorResponse('Error de base de datos al eliminar el registro',500, $e->getMessage());
+            return $this->successResponse(null, 'Registro eliminado exitosamente.', 204);
         } catch (Throwable $e) {
-            return $this->errorResponse('Error al eliminar el registro',500, $e->getMessage());
+            return $this->errorResponse('Error al eliminar el registro.', 500, $e->getMessage());
+        }
+    }
+
+    public function toggleStatus(Category $category): JsonResponse
+    {
+        try {
+            $category->status_id = $category->status_id == 1 ? 2 : 1;
+            $category->save();
+            return $this->successResponse($category, 'Registro actualizado éxitosamente');
+        } catch (Throwable $e) {
+            return $this->errorResponse('Error al actualizar el registro.', 500, $e->getMessage());
         }
     }
 }
