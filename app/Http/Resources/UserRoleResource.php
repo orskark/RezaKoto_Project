@@ -21,9 +21,9 @@ class UserRoleResource extends JsonResource
             'role' => $this->role,
             'role_name' => $this->role->name,
             'user' => $this->user->full_name,
-            'status' => $this->status->name,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
+            // // 'status' => $this->status->name,
+            // 'created_at' => $this->created_at->toDateTimeString(),
+            // 'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

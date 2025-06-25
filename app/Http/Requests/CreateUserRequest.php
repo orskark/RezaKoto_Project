@@ -23,7 +23,10 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'document_type_id' => 'required|exists:document_types,id',
-            'complete_name' => 'required|string|min:10|max:100',
+            'first_name' => 'required|string|max:100',
+            'middle_name' => 'sometimes|nullable|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'second_last_name' => 'sometimes|nullable|string|max:100',
             'email' => 'required|email|max:150|unique:users,email',
             'password' => 'required|string|min:8|max:50|confirmed',
             'identification' => 'required|string|min:6|max:20|unique:users,identification',
