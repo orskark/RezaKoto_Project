@@ -8,6 +8,17 @@ class Gender extends Model
 {
     protected $fillable = ['name'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (is_null($model->status_id)) {
+                $model->status_id = 1; // ID de status "Activo"
+            }
+        });
+    }
+
     public function sizes()
     {
         return $this->hasMany(Size::class, 'gender_id');

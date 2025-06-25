@@ -8,6 +8,17 @@ class Product extends Model
 {
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (is_null($model->status_id)) {
+                $model->status_id = 1; // ID de status "Activo"
+            }
+        });
+    }
+
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brand_id');

@@ -8,6 +8,17 @@ class Order extends Model
 {
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (is_null($model->status_id)) {
+                $model->status_id = 1; // ID de status "Activo"
+            }
+        });
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id');
@@ -41,5 +52,10 @@ class Order extends Model
     public function order_payments()
     {
         return $this->hasMany(OrderPayment::class, 'order_id');
+    }
+
+    public function payment_status()
+    {
+        return $this->belongsTo(PaymentStatus::class, 'payment_status_id');
     }
 }

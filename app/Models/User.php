@@ -19,7 +19,10 @@ class User extends Authenticatable implements JWTSubject
      * @var list<string>
      */
     protected $fillable = [
-        'complete_name',
+        'first_name',
+        'middle_name',
+        'last_name',
+        'second_last_name',
         'email',
         'password',
         'identification',
@@ -28,6 +31,17 @@ class User extends Authenticatable implements JWTSubject
         'document_type_id',
         'status_id'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (is_null($model->status_id)) {
+                $model->status_id = 1; // ID de status "Activo"
+            }
+        });
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -91,5 +105,19 @@ class User extends Authenticatable implements JWTSubject
     public function orders()
     {
         return $this->hasMany(Order::class, 'user_id');
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        // Recoger los valores de los 4 campos
+        $parts = [
+            $this->first_name,
+            $this->middle_name,
+            $this->last_name,
+            $this->second_last_name,
+        ];
+
+        // Filtrar nulos y vacíos, y unir con un solo espacio
+        return implode(' ', array_filter($parts, fn ($part) => !is_null($part) && trim($part) !== ''));
     }
 }

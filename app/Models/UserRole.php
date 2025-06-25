@@ -12,4 +12,24 @@ class UserRole extends Model
     public function role(): BelongsTo {
         return $this->belongsTo(Role::class);
     }
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (is_null($model->status_id)) {
+                $model->status_id = 1; // ID de status "Activo"
+            }
+        });
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
 }
