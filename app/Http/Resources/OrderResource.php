@@ -18,6 +18,7 @@ class OrderResource extends JsonResource
             'id'                   => $this->id,
             'total_value'          => $this->total_value,
             'mailing_address'      => $this->mailing_address,
+            'status' => $this->status->name,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

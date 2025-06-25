@@ -22,6 +22,7 @@ class EnterpriseResource extends JsonResource
         'phone_number'=> $this->phone_number,
         'address'     => $this->address,
         'email'       => $this->email,
+        'status' => $this->status->name,
         'created_at' => $this->created_at->toDateTimeString(),
         'updated_at' => $this->updated_at->toDateTimeString(),
         ];

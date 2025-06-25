@@ -17,6 +17,7 @@ class OrderShippingResource extends JsonResource
     return[
         'id'                   => $this->id,
         'delivery_date'        => $this->delivery_date,
+        'status' => $this->status->name,
         'created_at' => $this->created_at->toDateTimeString(),
         'updated_at' => $this->updated_at->toDateTimeString(),
         ];

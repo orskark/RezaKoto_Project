@@ -19,6 +19,7 @@ class OrderPaymentResource extends JsonResource
             'value'                => $this->value,
             'transaction_reference'=> $this->transaction_reference,
             'notes'                => $this->notes,
+            'status' => $this->status->name,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

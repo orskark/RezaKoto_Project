@@ -15,10 +15,16 @@ class StockResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'                    => $this->id,
-            'quantity'              => $this->quantity,
-            'reserved_quantity'     => $this->quantity,
-            'minimum_quantity'      => $this->quantity,
+            'id' => $this->id,
+            'name' => optional($this->product_variant)->sku . ' (' . optional($this->product_variant->product)->name . ')',
+            'product_variant_id' => $this->product_variant_id,
+            'warehouse_id' => $this->warehouse_id,
+            'quantity' => $this->quantity,
+            'reserved_quantity' => $this->reserved_quantity,
+            'minimum_quantity' => $this->minimum_quantity,
+            'product_variant' => optional($this->product_variant)->sku . ' (' . optional($this->product_variant->product)->name . ')',
+            'warehouse' => optional($this->warehouse)->name,
+            'status' => optional($this->status)->name,
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];

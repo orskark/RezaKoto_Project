@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OrderShipping extends Model
+class OrderStatus extends Model
 {
     protected $guarded = [];
 
@@ -24,18 +24,8 @@ class OrderShipping extends Model
         return $this->belongsTo(Status::class, 'status_id');
     }
 
-    public function order()
+    public function orders()
     {
-        return $this->belongsTo(Order::class, 'order_id');
-    }
-
-    public function enterprise()
-    {
-        return $this->belongsTo(Enterprise::class, 'enterprise_id');
-    }
-
-    public function shipping_status()
-    {
-        return $this->belongsTo(ShippingStatus::class, 'shipping_status_id');
+        return $this->hasMany(Order::class, 'order_status_id');
     }
 }
