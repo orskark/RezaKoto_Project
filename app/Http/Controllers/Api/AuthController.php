@@ -72,7 +72,7 @@ class AuthController extends Controller
             }
 
             $user = auth('api')->user();
-            $completeName = $user->complete_name;
+            $first_name = $user->first_name;
 
             if (!$user->roles->contains('id', $roleId)) {
                 return $this->errorResponse('Rol no autorizado.', 403);
@@ -81,7 +81,7 @@ class AuthController extends Controller
             $customClaims = ['role_id' => $roleId];
             $token = JWTAuth::claims($customClaims)->fromUser($user);
 
-            return $this->successResponse(['token' => $token, 'complete_name' => $completeName, 'role_id' => $roleId], 'Acceso exitoso.', 200);
+            return $this->successResponse(['token' => $token, 'first_name' => $first_name, 'role_id' => $roleId], 'Acceso exitoso.', 200);
 
         } catch (JWTException $e) {
             return $this->errorResponse('No se pudo generar el token.', 500, $e->getMessage());
