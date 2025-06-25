@@ -50,7 +50,6 @@ class AuthController extends Controller
                 'status_id' => StatusEnum::Active->value
             ]);
 
-            // $roles = $request->input('roles');
             $roles = [2];
             $user->roles()->attach($roles);
 
