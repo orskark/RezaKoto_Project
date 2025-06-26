@@ -22,7 +22,7 @@ class UpdateWarehouseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:255',
+            'name' => 'sometimes|string|max:50',
             'address' => 'sometimes|string|max:255',
         ];
     }

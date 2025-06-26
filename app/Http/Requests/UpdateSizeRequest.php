@@ -26,8 +26,8 @@ class UpdateSizeRequest extends FormRequest
             'gender_id' => 'required|exists:genders,id',
             'brand_id' => 'required|exists:brands,id',
             'category_id' => 'required|exists:categories,id',
-            'code' => 'required|string|max:255',
-            'label' => 'sometimes|string|max:255',
+            'code' => 'required|string|max:50',
+            'label' => 'sometimes|string|max:50',
             'notes' => 'sometimes|nullable|string|max:255',
         ];
     }

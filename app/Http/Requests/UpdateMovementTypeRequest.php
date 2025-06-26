@@ -22,7 +22,7 @@ class UpdateMovementTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|nullable|string|max:50|unique:movement_type,name',            
+            'name' => 'sometimes|nullable|string|max:50|unique:movement_type,name,' . $this->route('movement_type')->id,
         ];
     }
 }

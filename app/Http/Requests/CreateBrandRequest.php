@@ -22,7 +22,7 @@ class CreateBrandRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:5|unique:brands,name',
+            'name' => 'required|string|max:100|unique:brands,name',
 	        'description' => 'required|string|min:5|max:200',
         ];
     }

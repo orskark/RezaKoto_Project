@@ -22,7 +22,7 @@ class UpdateDocumentTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|nullable|string|max:50|unique:document_types,name',            
+            'name' => 'sometimes|nullable|string|max:50|unique:document_types,name,' . $this->route('document_type')->id,
         ];
     }
 }

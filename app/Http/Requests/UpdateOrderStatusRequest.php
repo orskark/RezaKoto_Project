@@ -22,7 +22,7 @@ class UpdateOrderStatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|nullable|string|max:50|unique:order_statuses,name',            
+            'name' => 'sometimes|nullable|string|max:50|unique:order_statuses,name,' . $this->route('order_status')->id,
         ];
     }
 }

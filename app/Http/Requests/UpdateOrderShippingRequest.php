@@ -22,7 +22,7 @@ class UpdateOrderShippingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'delivery_date' => 'required|nullable|date|unique:shippingstatus,name',
+            'delivery_date' => 'required|nullable|date|unique:shippingstatus,name,' . $this->route('order_shipping')->id,
         ];
     }
 }

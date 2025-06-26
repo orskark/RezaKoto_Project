@@ -21,14 +21,13 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $userId = $this->route('user')?->id; // <- obteniendo el ID del usuario desde la ruta
         return [
-            'first_name' => 'sometimes|nullable|string|min:10|max:100',
-            'middle_name' => 'sometimes|nullable|string|min:10|max:100',
-            'last_name' => 'sometimes|nullable|string|min:10|max:100',
-            'second_last_name' => 'sometimes|nullable|string|min:10|max:100',
-            'email' => 'sometimes|email|max:255|unique:users,email,' . $userId,
-            'identification' => 'sometimes|string|max:20|unique:users,identification,' . $userId,
+            'first_name' => 'sometimes|nullable|string|min:3|max:100',
+            'middle_name' => 'sometimes|nullable|string|min:3|max:100',
+            'last_name' => 'sometimes|nullable|string|min:3|max:100',
+            'second_last_name' => 'sometimes|nullable|string|min:3|max:100',
+            'email' => 'sometimes|email|max:255|unique:users,email,' . $this->route('user')->id,
+            'identification' => 'sometimes|string|max:20|unique:users,identification,' . $this->route('user')->id,
             'phone_number' => 'sometimes|string|max:20',
             'address' => 'sometimes|string|max:255',
             'document_type_id' => 'sometimes|exists:document_types,id',

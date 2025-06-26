@@ -22,7 +22,7 @@ class CreateEnterpriseTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:5|unique:enterprise_types,name',
+            'name' => 'required|string|max:50|unique:enterprise_types,name',
 	        'description' => 'required|string|min:5|max:200',
         ];
     }

@@ -22,12 +22,12 @@ class UpdateEnterpriseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:255',
+            'name' => 'sometimes|string|max:50',
             'description' => 'sometimes|string',
-            'NIT' => 'sometimes|digits:9|unique:enterprises,NIT',
-            'phone_number' => 'sometimes|string|min:6|unique:enterprises,phone_number',
+            'NIT' => 'sometimes|digits:9|unique:enterprises,NIT,' . $this->route('enterprise')->id,
+            'phone_number' => 'sometimes|string|min:6|unique:enterprises,phone_number,' . $this->route('enterprise')->id,
             'address' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:enterprises,email',
+            'email' => 'sometimes|email|unique:enterprises,email,' . $this->route('enterprise')->id,
         ];
     }
 }

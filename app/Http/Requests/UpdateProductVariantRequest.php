@@ -22,7 +22,7 @@ class UpdateProductVariantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'sku' => 'sometimes|string|max:255|unique:product_variants,sku'
+            'sku' => 'sometimes|string|max:255|unique:product_variants,sku,' . $this->route('product_variant')->id,
         ];
     }
 }

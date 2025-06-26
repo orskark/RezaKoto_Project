@@ -22,7 +22,7 @@ class UpdateGenderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|nullable|string|max:50|unique:genders,name',            
+            'name' => 'sometimes|nullable|string|max:50|unique:genders,name,' . $this->route('gender')->id,
         ];
     }
 }

@@ -22,7 +22,7 @@ class CreateEnterpriseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:100',
             'description' => 'required|string',
             'NIT' => 'required|digits:9|unique:enterprises,NIT',
             'phone_number' => 'required|string|min:6|unique:enterprises,phone_number',

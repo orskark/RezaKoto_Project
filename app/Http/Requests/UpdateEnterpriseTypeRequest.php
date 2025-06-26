@@ -22,7 +22,7 @@ class UpdateEnterpriseTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|nullable|string|max:50|unique:enterprise_types,name',
+            'name' => 'sometimes|nullable|string|max:50|unique:enterprise_types,name,' . $this->route('enterprise_type')->id,
             'description' => 'sometimes|nullable|string|min:5|max:200',
         ];
     }
